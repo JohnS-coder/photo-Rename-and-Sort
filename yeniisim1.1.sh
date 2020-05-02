@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash  
 while True
 do
 	read -p "Klasör adını girin: " Klasor
@@ -23,9 +23,9 @@ do
 				asil=$( echo "$ad2" | cut -d "." -f1 )
 				say=$( ls "$Klasor/newfoto" | grep -w "$asil" | wc -l )
 				kopy="$asil Copy($say) .$jpg"
-				cp -i -v  "$Klasor/$ad" "$Klasor/newfoto/$kopy"
+				cp -i -v "$Klasor/$ad" "$Klasor/newfoto/$kopy" 
 			else
-				cp -i -v  "$Klasor/$ad" "$Klasor/newfoto/$ad2"
+				cp -i -v "$Klasor/$ad" "$Klasor/newfoto/$ad2" 
 			fi
 			(( ff++ ))
 		else
@@ -51,12 +51,11 @@ do
 	echo "..Yeni isimli dosyalar topluca $Klasor/newfoto klasöründedir......"
 	echo "...................LÜTFEN BEKLEYİN................................"
 	echo "..................BÖLÜNME BAŞLIYOR!..............................."
-	sleep 2
 	ls $Klasor/newfoto > newfilelist.csv 
-	uniqsayi=$( ls "$Klasor/newfoto" | cut -d "_" -f1  | sort | uniq | wc -l ) 
+	uniqsayi=$( ls $Klasor/newfoto | cut -d "_" -f1  | sort | uniq | wc -l ) 
 	for (( i=1; i<="$uniqsayi"; i++ ))
 	do
-		uniqdir=$( ls "$Klasor/newfoto" | cut -d "_" -f1  | sort | uniq | sed -n "$i"p )
+		uniqdir=$( cat newfilelist.csv | cut -d "_" -f1  | sort | uniq | sed -n "$i"p )
 		if [ -e "$Klasor/newfoto/$uniqdir" ]
 		then
 			echo "$uniqdir klasörü mevcut.."
@@ -75,7 +74,8 @@ do
 			filex=$( echo "$file" | cut -d "_" -f1 )
 			if [ -d "$Klasor/newfoto/$file" ] 
 			then
-				echo "Not file $file"
+				#echo "Not file $file"
+				continue
 			else
 				if [ "$filex" == "$uniqdir" ]
 				then
@@ -85,13 +85,14 @@ do
 						asil=$( echo $file | cut -d "." -f1 )
 						say=$( ls "$Klasor/newfoto/$uniqdir" | grep -w "$asil" | wc -l )
 						kopy="$asil Copy($say) .$jpg"
-						mv -v -i "$Klasor/newfoto/$file" "$Klasor/newfoto/$uniqdir/$kopy"
+						mv -v -i "$Klasor/newfoto/$file" "$Klasor/newfoto/$uniqdir/$kopy" #-v sildim
 					else
-						mv -v -i "$Klasor/newfoto/$file" "$Klasor/newfoto/$uniqdir/"
+						mv -v -i "$Klasor/newfoto/$file" "$Klasor/newfoto/$uniqdir/" #-v sildim
 					fi
 					(( ss++ ))
 				else
-					echo $file eşit değil  $uniqdir..
+					#echo $file eşit değil  $uniqdir..
+					continue
 				fi
 			fi
 		done
@@ -109,7 +110,7 @@ do
 	then
 		break
 	else
-		echo "Bekleniyor....30 sn içinde kapanacak!"
+		echo "Bekleniyor..  30 sn içinde kapanacak!"
 		sleep 30
 		break
 	fi
